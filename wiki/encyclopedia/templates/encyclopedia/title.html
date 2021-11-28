@@ -1,0 +1,18 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Encyclopedia - {{ title }}
+{% endblock %}
+
+{% block body %}
+    {% if message != None %}
+        <div class="errorMsg">{{ message }}</div>
+    {% endif %}
+
+    {% if article != None %}
+        <h2>{{ title }}</h2>
+        <BR>
+        {{ article }}
+
+    {% endif%}
+{% endblock %}
