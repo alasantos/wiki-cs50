@@ -1,10 +1,19 @@
+from django import forms
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 import random
 
 from . import util
 
+class NewArticleForm( forms.Form ):
+    title = forms.CharField(label='Title ', max_length=80)
+   # article = forms.CharField(label='Article text ')
 
+def addTitle( request):
+    context = {
+        "NewArticle": NewArticleForm()
+    }
+    return(render, "encyclopedia/add.html", context )
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
