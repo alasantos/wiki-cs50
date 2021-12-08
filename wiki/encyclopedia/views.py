@@ -6,14 +6,15 @@ import random
 from . import util
 
 class NewArticleForm( forms.Form ):
-    title = forms.CharField(label='Title ', max_length=80)
+    title = forms.CharField(label='Title ')
+    description = forms.CharField( label='Description ' )
    # article = forms.CharField(label='Article text ')
 
 def addTitle( request):
     context = {
         "NewArticle": NewArticleForm()
     }
-    return(render, "encyclopedia/add.html", context )
+    return render( request, "encyclopedia/addTitle.html", context ) 
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
