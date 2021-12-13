@@ -10,5 +10,6 @@
         <form action="{% url 'wiki:addTitle' %}" method="post">
             {% csrf_token %}
             {{ NewArticle }}
+            <input type="submit" />
         </form>
 {% endblock %}

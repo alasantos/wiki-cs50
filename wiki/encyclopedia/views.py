@@ -6,15 +6,27 @@ import random
 from . import util
 
 class NewArticleForm( forms.Form ):
-    title = forms.CharField(label='Title ')
-    description = forms.CharField( label='Description ' )
-   # article = forms.CharField(label='Article text ')
+    title = forms.CharField(label='Title ', required="true")
+    description = forms.CharField( label='Description ', required="true", widget=forms.Textarea( attrs= { 'rows': 1, 'cols': 20, 'style': 'height: 1em;' } ) )
 
-def addTitle( request):
+def addTitle( request ):
     context = {
-        "NewArticle": NewArticleForm()
+        "NewArticle": NewArticleForm(),
+        "Message": None
     }
+
+    if request.method == "POST":
+        form = NewArticleForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            description = form.cleaned_data['description']
+            if util.search_in_titles( query = title ) == None:
+                message = f"{title} already exists"
+                context.update( { "Message": message } )
+
     return render( request, "encyclopedia/addTitle.html", context ) 
+
+
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -38,7 +50,7 @@ def get_title(request, TITLE):
 def search_title( request ):
     msg = None
     query = request.POST.get("q")
-    article = util.search_in_titles ( query )
+    article = util.search_in_titles( query )
     if ( article ) == None:
         msg = f"Article {query.upper()} not avaliable"
 

@@ -38,6 +38,5 @@ def get_entry(title):
 
 def search_in_titles( query ):
     files = list_entries()
-    #filtered_values = [ file.upper() for file in files if query.upper() in file.upper() ]
-    filtered_values = filter( lambda f: query.upper() in files.upper() and 'md' in files, files )
+    filtered_values = [ file for file in files if query.upper() in file.upper() ]
     return( filtered_values )    
