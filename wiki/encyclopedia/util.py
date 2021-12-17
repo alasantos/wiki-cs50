@@ -37,6 +37,9 @@ def get_entry(title):
         return None
 
 def search_in_titles( query ):
+    '''
+    search the query parameter and returns a list of corresponding entries
+    '''
     files = list_entries()
     filtered_values = [ file for file in files if query.upper() in file.upper() ]
     return( filtered_values )    
