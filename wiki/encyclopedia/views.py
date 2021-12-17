@@ -1,13 +1,14 @@
 from django import forms
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 import random
 
 from . import util
 
 class NewArticleForm( forms.Form ):
     title = forms.CharField(label='Title ', required="true")
-    description = forms.CharField( label='Description ', required="true", widget=forms.Textarea( attrs= { 'rows': 1, 'cols': 20, 'style': 'height: 1em;' } ) )
+    description = forms.CharField( label='Description ', required="true", widget=forms.Textarea( attrs= { 'rows': 5, 'cols': 20 } ) )
 
 def addTitle( request ):
     context = {
@@ -30,7 +31,7 @@ def addTitle( request ):
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
-        "entries": util.list_entries()
+                    "entries": util.list_entries()
     })
 
 def get_title(request, TITLE):
@@ -50,14 +51,18 @@ def get_title(request, TITLE):
 def search_title( request ):
     msg = None
     query = request.POST.get("q")
-    article = util.search_in_titles( query )
-    if ( article ) == None:
-        msg = f"Article {query.upper()} not avaliable"
+    articles = util.search_in_titles( query )
+    qtty = len( articles )
+    if( len(articles) == 0 ):
+        msg = f'Search for "{query.upper()}" found no results'
 
-    return render( request, "encyclopedia/index.html",
+    if( len( articles ) == 1):
+        return HttpResponseRedirect( reverse( "wiki:get_title", args=articles))
+    else:
+        msg = f'Search for "{query.upper()}" found {qtty} results'
+        return render( request, "encyclopedia/index.html",
                             {
-                                "article": article,
-                                "title": query,
+                                "entries": articles,
                                 "message": msg
                             }
                 )

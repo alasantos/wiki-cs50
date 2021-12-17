@@ -12,9 +12,14 @@ h1 {
     padding-top: 20px;
 }
 
+h2 {
+    margin-top: 0px;
+    padding-top: 10px;
+}
+
 textarea {
-    height: 90vh;
-    width: 80%;
+    height: 30vh;
+    width: 50%;
 }
 
 .main {

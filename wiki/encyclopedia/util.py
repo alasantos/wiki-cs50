@@ -42,4 +42,4 @@ def search_in_titles( query ):
     '''
     files = list_entries()
     filtered_values = [ file for file in files if query.upper() in file.upper() ]
-    return( filtered_values )    
+    return( filtered_values )     

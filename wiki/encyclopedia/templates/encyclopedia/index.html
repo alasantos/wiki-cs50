@@ -5,11 +5,14 @@
 {% endblock %}
 
 {% block body %}
+{% if message == None %}
     <h1>All Pages</h1>
-
+{% else %}
+    <h2>{{ message }} </h2>
+{% endif %}
     <ul>
         {% for entry in entries %}
-            <li><a href="{% url 'wiki:index' %}{{ entry }}">{{ entry }}</a></li>
+            <li><a href="{% url 'wiki:index' %}{{ entry }}" class="search">{{ entry }}</a></li>
         {% endfor %}
     </ul>
 
