@@ -1,5 +1,7 @@
 from django import forms
 from django.http.response import HttpResponseRedirect
+from django.core.files.storage import default_storage
+
 from django.shortcuts import render
 from django.urls import reverse
 import random
@@ -10,21 +12,29 @@ class NewArticleForm( forms.Form ):
     title = forms.CharField(label='Title ', required="true")
     description = forms.CharField( label='Description ', required="true", widget=forms.Textarea( attrs= { 'rows': 5, 'cols': 20 } ) )
 
-def addTitle( request ):
+def editTitle( request, form ):
+    pass
+
+
+def addTitle( request, Title = None ):
     context = {
         "NewArticle": NewArticleForm(),
         "Message": None
     }
+
 
     if request.method == "POST":
         form = NewArticleForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data["title"]
             description = form.cleaned_data['description']
-            if util.search_in_titles( query = title ) == None:
+            if len( util.search_in_titles( title ) ) == 1:
                 message = f"{title} already exists"
-                context.update( { "Message": message } )
-
+                context.update( { "message": message } )
+                context.update( { "NewArticle": form})
+            else:
+                util.save_entry( title, description )
+                    
     return render( request, "encyclopedia/addTitle.html", context ) 
 
 
