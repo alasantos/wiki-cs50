@@ -7,6 +7,12 @@ code {
     white-space: pre;
 }
 
+newarticle_label{
+    white-space: pre;
+    align-content: top;
+    color: purple;
+}
+
 h1 {
     margin-top: 0px;
     padding-top: 20px;
