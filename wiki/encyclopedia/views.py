@@ -8,20 +8,17 @@ import random
 
 from . import util
 
+
 class NewArticleForm( forms.Form ):
     title = forms.CharField(label='Title ', required="true")
     description = forms.CharField( label='Description ', required="true", widget=forms.Textarea( attrs= { 'rows': 5, 'cols': 20 } ) )
 
-def editTitle( request, form ):
-    pass
-
-
 def addTitle( request, Title = None ):
+    ''' addTitle view '''
     context = {
         "NewArticle": NewArticleForm(),
         "Message": None
     }
-
 
     if request.method == "POST":
         form = NewArticleForm(request.POST)
@@ -31,20 +28,30 @@ def addTitle( request, Title = None ):
             if len( util.search_in_titles( title ) ) == 1:
                 message = f"{title} already exists"
                 context.update( { "message": message } )
-                context.update( { "NewArticle": form})
+                context.update( { "NewArticle": form })
             else:
                 util.save_entry( title, description )
-                    
+                return HttpResponseRedirect( reverse( "wiki:index" ) )
+    elif request.method == "GET":
+        print( Title)
+        print("to aqui" )
+
     return render( request, "encyclopedia/addTitle.html", context ) 
+    #return HttpResponseRedirect( reverse( "encyclopedia:addTitle", args=context))
 
-
+def edit_title(request, TITLE ):
+    if request.method == "GET":
+        print( 'im editting ')
+        
 
 def index(request):
+    ''' Home view '''
     return render(request, "encyclopedia/index.html", {
                     "entries": util.list_entries()
     })
 
 def get_title(request, TITLE):
+    ''' Retrieves a requested title '''
     result = message = None
     result = util.get_entry( TITLE )
     if result == None:
@@ -57,8 +64,8 @@ def get_title(request, TITLE):
                         "message": message
                     } 
                   )
-
 def search_title( request ):
+    ''' Search solution entry point '''
     msg = None
     query = request.POST.get("q")
     articles = util.search_in_titles( query )
@@ -78,6 +85,7 @@ def search_title( request ):
                 )
 
 def random_title (request):
+    ''' Random article entry point '''
     article = message = None
     selected_title = random.choice( util.list_entries() )
     if selected_title == None:
