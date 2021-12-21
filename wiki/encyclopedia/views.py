@@ -25,13 +25,8 @@ def addTitle( request, Title = None ):
         if form.is_valid():
             title = form.cleaned_data["title"]
             description = form.cleaned_data['description']
-            if len( util.search_in_titles( title ) ) == 1:
-                message = f"{title} already exists"
-                context.update( { "message": message } )
-                context.update( { "NewArticle": form })
-            else:
-                util.save_entry( title, description )
-                return HttpResponseRedirect( reverse( "wiki:index" ) )
+            util.save_entry( title, description )
+            return HttpResponseRedirect( reverse( "wiki:index" ) )
     elif request.method == "GET":
         print( Title)
         print("to aqui" )
@@ -39,10 +34,21 @@ def addTitle( request, Title = None ):
     return render( request, "encyclopedia/addTitle.html", context ) 
     #return HttpResponseRedirect( reverse( "encyclopedia:addTitle", args=context))
 
-def edit_title(request, TITLE ):
-    if request.method == "GET":
-        print( 'im editting ')
+def edit_title(request, TITLE = None ):
+    form = NewArticleForm()
+    if TITLE != None and request.method == "GET":
+        article = util.get_entry( TITLE )
+        form.description = article
+        form.title = TITLE
         
+    return render( request, "encyclopedia/addTitle.html", 
+                    {
+                        "NewArticle": form,
+                        "Title": TITLE,
+                        "Message": "hhwhwhwhwhwhw"
+                    }  
+                 )
+
 
 def index(request):
     ''' Home view '''
