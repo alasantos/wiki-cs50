@@ -5,13 +5,15 @@
 {% endblock %}
 
 {% block body %}
-        <h2> New article</h2>
+        <h2> Edit article</h2>
         <div class="container">
-        <form action="{% url 'wiki:addTitle' %}" method="post">
+        {{ Title }}
+        <form method="post">
             {% csrf_token %}
-                {{ NewArticle }}
+                {{ Title }}
+                {{ article }}
+                {{ NewArticle.as_p }}
                 <br />
-                {{ Title}}
             <input type="submit" />
         </form>
         <h2> {{ message}}</h2>

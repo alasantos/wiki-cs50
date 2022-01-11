@@ -35,16 +35,18 @@ def addTitle( request, Title = None ):
     #return HttpResponseRedirect( reverse( "encyclopedia:addTitle", args=context))
 
 def edit_title(request, TITLE = None ):
-    form = NewArticleForm()
+ 
     if TITLE != None and request.method == "GET":
+        form = NewArticleForm()
         article = util.get_entry( TITLE )
-        form.description = article
-        form.title = TITLE
+        #form.description = article
+        form.initial["description"] = article
+        form.initial["Title"] = TITLE
+        #form.title= TITLE
         
-    return render( request, "encyclopedia/addTitle.html", 
+    return render( request, "encyclopedia/editTitle.html", 
                     {
                         "NewArticle": form,
-                        "Title": TITLE,
                         "Message": "hhwhwhwhwhwhw"
                     }  
                  )
