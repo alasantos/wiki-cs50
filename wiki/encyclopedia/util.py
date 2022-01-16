@@ -1,8 +1,16 @@
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 
+from markdown2 import Markdown
+
 import re
 
+
+def print_markdown( readout ):
+    mk = Markdown()
+    result = mk.convert( readout )
+    
+    return result
 
 def list_entries():
     """
@@ -32,7 +40,9 @@ def get_entry(title):
     """
     try:
         f = default_storage.open(f"entries/{title}.md")
-        return f.read().decode("utf-8")
+        contents = f.read().decode("utf-8")
+        contents = print_markdown( contents )
+        return contents
     except FileNotFoundError:
         return None
 

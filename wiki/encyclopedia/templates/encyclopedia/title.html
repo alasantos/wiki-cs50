@@ -12,6 +12,7 @@
     {% if article != None %}
         <h2>{{ title }}</h2>
         <BR>
-        {{ article }}
+        {{ article|safe}}
+        <a href= "{% url 'wiki:edit_title' title %}" class="search">Edit this article</a>
     {% endif %}
 {% endblock %}

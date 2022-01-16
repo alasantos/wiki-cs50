@@ -12,3 +12,4 @@ urlpatterns = [
     , path( "edit/<str:TITLE>"     , views.edit_title,     name="edit_title"   )
     , path( "random_title/"        , views.random_title,   name="random_title" )
 ]
+#        <a href= "{% url 'wiki:title' %}" class="search">Edit this article</a>

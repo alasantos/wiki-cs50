@@ -1,7 +1,7 @@
 from django import forms
 from django.http.response import HttpResponseRedirect
 from django.core.files.storage import default_storage
-
+from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.urls import reverse
 import random
@@ -10,8 +10,8 @@ from . import util
 
 
 class NewArticleForm( forms.Form ):
-    title = forms.CharField(label='Title ', required="true")
-    description = forms.CharField( label='Description ', required="true", widget=forms.Textarea( attrs= { 'rows': 5, 'cols': 20 } ) )
+    title = forms.CharField(label='Title : ', required="true")
+    description = forms.CharField( label='Description : ', required="true", widget=forms.Textarea( attrs= { 'rows': 5, 'cols': 20 } ) )
 
 def addTitle( request, Title = None ):
     ''' addTitle view '''
@@ -34,16 +34,27 @@ def addTitle( request, Title = None ):
     return render( request, "encyclopedia/addTitle.html", context ) 
     #return HttpResponseRedirect( reverse( "encyclopedia:addTitle", args=context))
 
-def edit_title(request, TITLE = None ):
- 
+def edit_title(request, TITLE ):
+
+    
+    form = NewArticleForm(request.POST or None)
     if TITLE != None and request.method == "GET":
-        form = NewArticleForm()
         article = util.get_entry( TITLE )
-        #form.description = article
-        form.initial["description"] = article
-        form.initial["Title"] = TITLE
-        #form.title= TITLE
-        
+        initial_data = {
+            'title': TITLE,
+            'description': article
+        }
+        form.initial=initial_data
+
+    if TITLE != None and request.method == 'POST':
+        if form.is_valid():
+            article = form.cleaned_data["description"]
+            TITLE = form.cleaned_data['title']
+            util.save_entry( title=TITLE, content=article)
+            return HttpResponseRedirect( reverse( "wiki:index" ) )
+        else:
+            print( 'not valid')
+
     return render( request, "encyclopedia/editTitle.html", 
                     {
                         "NewArticle": form,
