@@ -27,16 +27,12 @@ def addTitle( request, Title = None ):
             description = form.cleaned_data['description']
             util.save_entry( title, description )
             return HttpResponseRedirect( reverse( "wiki:index" ) )
-    elif request.method == "GET":
-        print( Title)
-        print("to aqui" )
+
 
     return render( request, "encyclopedia/addTitle.html", context ) 
     #return HttpResponseRedirect( reverse( "encyclopedia:addTitle", args=context))
 
 def edit_title(request, TITLE ):
-
-    
     form = NewArticleForm(request.POST or None)
     if TITLE != None and request.method == "GET":
         article = util.get_entry( TITLE )
@@ -75,7 +71,8 @@ def get_title(request, TITLE):
     result = util.get_entry( TITLE )
     if result == None:
         message = f"Article not found for {TITLE}"
-
+    else:
+        result = util.print_markdown( result )
     return render( request, "encyclopedia/title.html", 
                     {
                         "article": result, 
@@ -110,7 +107,7 @@ def random_title (request):
     if selected_title == None:
         message = f"Surprise article not available {selected_title}"
 
-    article = util.get_entry( selected_title )
+    article = util.print_markdown( util.get_entry( selected_title ) )
     
     return render( request, "encyclopedia/title.html", 
                     {

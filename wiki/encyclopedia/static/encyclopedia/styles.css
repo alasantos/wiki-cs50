@@ -28,6 +28,12 @@ textarea {
     width: 50%;
 }
 
+.errorMsg {
+    font-size:20px;
+    color: red;
+    font-weight: bold;
+
+}
 .main {
     padding: 10px;
 }

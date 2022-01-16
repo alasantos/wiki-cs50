@@ -41,7 +41,6 @@ def get_entry(title):
     try:
         f = default_storage.open(f"entries/{title}.md")
         contents = f.read().decode("utf-8")
-        contents = print_markdown( contents )
         return contents
     except FileNotFoundError:
         return None
