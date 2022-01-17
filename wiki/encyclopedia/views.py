@@ -13,6 +13,8 @@ class NewArticleForm( forms.Form ):
     Title = forms.CharField(label='Title ', required="true")
     description = forms.CharField( label='Description ', required="true", widget=forms.Textarea( attrs= { 'rows': 5, 'cols': 20 } ) )
 
+
+
 def addTitle( request, Title = None ):
     ''' addTitle view '''
     context = {
@@ -79,6 +81,8 @@ def get_title(request, TITLE):
                         "message": message
                     } 
                   )
+
+
 def search_title( request ):
     ''' Search solution entry point '''
     msg = None
