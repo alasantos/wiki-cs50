@@ -10,8 +10,8 @@ from . import util
 
 
 class NewArticleForm( forms.Form ):
-    title = forms.CharField(label='Title : ', required="true")
-    description = forms.CharField( label='Description : ', required="true", widget=forms.Textarea( attrs= { 'rows': 5, 'cols': 20 } ) )
+    Title = forms.CharField(label='Title ', required="true")
+    description = forms.CharField( label='Description ', required="true", widget=forms.Textarea( attrs= { 'rows': 5, 'cols': 20 } ) )
 
 def addTitle( request, Title = None ):
     ''' addTitle view '''
@@ -23,10 +23,11 @@ def addTitle( request, Title = None ):
     if request.method == "POST":
         form = NewArticleForm(request.POST)
         if form.is_valid():
-            title = form.cleaned_data["title"]
+            title = form.cleaned_data["Title"]
             description = form.cleaned_data['description']
             util.save_entry( title, description )
-            return HttpResponseRedirect( reverse( "wiki:index" ) )
+            return HttpResponseRedirect( reverse( "wiki:get_title", kwargs={'TITLE': title} ) )
+
 
 
     return render( request, "encyclopedia/addTitle.html", context ) 
@@ -37,7 +38,7 @@ def edit_title(request, TITLE ):
     if TITLE != None and request.method == "GET":
         article = util.get_entry( TITLE )
         initial_data = {
-            'title': TITLE,
+            'Title': TITLE,
             'description': article
         }
         form.initial=initial_data
@@ -45,11 +46,9 @@ def edit_title(request, TITLE ):
     if TITLE != None and request.method == 'POST':
         if form.is_valid():
             article = form.cleaned_data["description"]
-            TITLE = form.cleaned_data['title']
+            TITLE = form.cleaned_data['Title']
             util.save_entry( title=TITLE, content=article)
-            return HttpResponseRedirect( reverse( "wiki:index" ) )
-        else:
-            print( 'not valid')
+            return HttpResponseRedirect( reverse( "wiki:get_title", kwargs={'TITLE': TITLE} ) )
 
     return render( request, "encyclopedia/editTitle.html", 
                     {
