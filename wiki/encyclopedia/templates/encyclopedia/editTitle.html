@@ -1,17 +1,14 @@
 {% extends "encyclopedia/layout.html" %}
 
 {% block title %}
-    Encyclopedia - {{ Title }}
+    Encyclopedia - {{ NewArticle.Title.value }}, edit article
 {% endblock %}
 
 {% block body %}
         <h2> Edit article</h2>
         <div class="container">
-        {{ Title }}
         <form method="post">
             {% csrf_token %}
-                {{ Title }}
-                {{ article }}
                 {{ NewArticle.as_p }}
                 <br />
             <input type="submit" />
